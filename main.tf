@@ -130,7 +130,7 @@ resource "aws_route" "private_nat_gateway" {
 #----------------------------------------------------------
 # RDS DB subnet group
 
-resource "aws_db_subnet_group" "database" {
+resource "aws_db_subnet_group" "this" {
   count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
 
   name        = "${lower(var.name)}"
@@ -143,7 +143,7 @@ resource "aws_db_subnet_group" "database" {
 #----------------------------------------------------------
 # Redshift subnet group
 
-resource "aws_redshift_subnet_group" "redshift" {
+resource "aws_redshift_subnet_group" "this" {
   count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
 
   name        = "${var.name}"
@@ -156,7 +156,7 @@ resource "aws_redshift_subnet_group" "redshift" {
 #----------------------------------------------------------
 # ElastiCache subnet group
 
-resource "aws_elasticache_subnet_group" "elasticache" {
+resource "aws_elasticache_subnet_group" "this" {
   count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
 
   name        = "${var.name}"
