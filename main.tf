@@ -128,6 +128,43 @@ resource "aws_route" "private_nat_gateway" {
 }
 
 #----------------------------------------------------------
+# RDS DB subnet group
+
+resource "aws_db_subnet_group" "database" {
+  count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  name        = "${lower(var.name)}"
+  description = "Database subnet group for ${var.name}"
+  subnet_ids  = ["${aws_subnet.intra.*.id}"]
+
+  tags = "${merge(var.tags, map("Name", format("%s", var.name)))}"
+}
+
+#----------------------------------------------------------
+# Redshift subnet group
+
+resource "aws_redshift_subnet_group" "redshift" {
+  count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  name        = "${var.name}"
+  description = "Redshift subnet group for ${var.name}"
+  subnet_ids  = ["${aws_subnet.intra.*.id}"]
+
+  tags = "${merge(var.tags, map("Name", format("%s", var.name)))}"
+}
+
+#----------------------------------------------------------
+# ElastiCache subnet group
+
+resource "aws_elasticache_subnet_group" "elasticache" {
+  count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  name        = "${var.name}"
+  description = "ElastiCache subnet group for ${var.name}"
+  subnet_ids  = ["${aws_subnet.intra.*.id}"]
+}
+
+#----------------------------------------------------------
 # VPC Endpoint - S3
 
 data "aws_vpc_endpoint_service" "s3" {
