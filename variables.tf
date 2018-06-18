@@ -1,7 +1,11 @@
-variable "name" {}
+variable "name" {
+  description = "Name to be used on all the resources as identifier"
+  default     = ""
+}
 
 variable "cidr_block" {
-  default = "10.0.0.0/16"
+  description = "The CIDR block for the VPC"
+  default     = "10.0.0.0/16"
 }
 
 variable "public_subnets" {
@@ -14,9 +18,15 @@ variable "private_subnets" {
   default     = []
 }
 
+variable "intra_subnets" {
+  description = "List of CIDR block for intra subnet"
+  default     = []
+}
+
 variable "availability_zones" {
-  type    = "list"
-  default = []
+  description = "A list of availability zones in the region"
+  type        = "list"
+  default     = []
 }
 
 variable "enable_nat_gateway" {

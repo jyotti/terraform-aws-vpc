@@ -51,6 +51,15 @@ resource "aws_route_table" "private" {
   tags = "${merge(var.tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
 }
 
+// intra
+resource "aws_route_table" "intra" {
+  count = "${length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  vpc_id = "${aws_vpc.this.id}"
+
+  tags = "${merge(var.tags, map("Name", "intra"))}"
+}
+
 #----------------------------------------------------------
 # Subnet
 
@@ -76,6 +85,18 @@ resource "aws_subnet" "private" {
   map_public_ip_on_launch = true
 
   tags = "${merge(var.tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
+}
+
+// intra
+resource "aws_subnet" "intra" {
+  count = "${length(var.intra_subnets)}"
+
+  vpc_id                  = "${aws_vpc.this.id}"
+  cidr_block              = "${element(var.intra_subnets, count.index)}"
+  availability_zone       = "${element(var.availability_zones, count.index)}"
+  map_public_ip_on_launch = true
+
+  tags = "${merge(var.tags, map("Name", format("intra.%s", element(var.availability_zones, count.index))))}"
 }
 
 #----------------------------------------------------------
@@ -136,6 +157,13 @@ resource "aws_vpc_endpoint_route_table_association" "public_s3" {
   route_table_id  = "${aws_route_table.public.id}"
 }
 
+resource "aws_vpc_endpoint_route_table_association" "intra_s3" {
+  count = "${var.enable_s3_endpoint && length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  vpc_endpoint_id = "${aws_vpc_endpoint.s3.id}"
+  route_table_id  = "${aws_route_table.intra.id}"
+}
+
 #----------------------------------------------------------
 # VPC Endpoint - DynamoDB
 
@@ -166,6 +194,13 @@ resource "aws_vpc_endpoint_route_table_association" "public_dynamodb" {
   route_table_id  = "${aws_route_table.public.id}"
 }
 
+resource "aws_vpc_endpoint_route_table_association" "intra_dynamodb" {
+  count = "${var.enable_dynamodb_endpoint && length(var.intra_subnets) > 0 ? 1 : 0}"
+
+  vpc_endpoint_id = "${aws_vpc_endpoint.dynamodb.id}"
+  route_table_id  = "${aws_route_table.intra.id}"
+}
+
 #----------------------------------------------------------
 # Route Table Association
 
@@ -183,4 +218,11 @@ resource "aws_route_table_association" "private" {
 
   subnet_id      = "${element(aws_subnet.private.*.id, count.index)}"
   route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+}
+
+resource "aws_route_table_association" "intra" {
+  count = "${length(var.intra_subnets)}"
+
+  subnet_id      = "${element(aws_subnet.intra.*.id, count.index)}"
+  route_table_id = "${element(aws_route_table.intra.*.id, count.index)}"
 }
