@@ -76,4 +76,16 @@ module "vpc" {
   tags = {
     Environment = "example"
   }
+
+  public_subnet_tags = {
+    Type = "public"
+  }
+
+  private_subnet_tags = {
+    Type = "private"
+  }
+
+  intra_subnet_tags = {
+    Type = "intra"
+  }
 }
