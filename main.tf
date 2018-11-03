@@ -72,7 +72,7 @@ resource "aws_subnet" "public" {
   availability_zone       = "${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = true
 
-  tags = "${merge(var.tags, map("Name", format("public.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(var.tags, var.public_subnet_tags, map("Name", format("public.%s", element(var.availability_zones, count.index))))}"
 }
 
 // private
@@ -84,7 +84,7 @@ resource "aws_subnet" "private" {
   availability_zone       = "${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = true
 
-  tags = "${merge(var.tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(var.tags, var.private_subnet_tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
 }
 
 // intra
@@ -96,7 +96,7 @@ resource "aws_subnet" "intra" {
   availability_zone       = "${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = true
 
-  tags = "${merge(var.tags, map("Name", format("intra.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(var.tags, var.intra_subnet_tags, map("Name", format("intra.%s", element(var.availability_zones, count.index))))}"
 }
 
 #----------------------------------------------------------

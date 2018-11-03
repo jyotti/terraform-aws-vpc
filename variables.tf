@@ -13,14 +13,29 @@ variable "public_subnets" {
   default     = []
 }
 
+variable "public_subnet_tags" {
+  description = "Additional tags for the public subnets"
+  default     = {}
+}
+
 variable "private_subnets" {
   description = "List of CIDR block for private subnet"
   default     = []
 }
 
+variable "private_subnet_tags" {
+  description = "Additional tags for the private subnets"
+  default     = {}
+}
+
 variable "intra_subnets" {
   description = "List of CIDR block for intra subnet"
   default     = []
+}
+
+variable "intra_subnet_tags" {
+  description = "Additional tags for the intra subnets"
+  default     = {}
 }
 
 variable "availability_zones" {
