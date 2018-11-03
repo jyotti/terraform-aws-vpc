@@ -60,7 +60,7 @@ locals {
 
 module "vpc" {
   source             = "../../"
-  name               = "standard"
+  name               = "public-private"
   cidr_block         = "${var.cidr_block}"
   public_subnets     = ["${local.az1_20bit_cidr1}", "${local.az2_20bit_cidr1}", "${local.az3_20bit_cidr1}"]
   private_subnets    = ["${local.az1_19bit_cidr1}", "${local.az2_19bit_cidr1}", "${local.az3_19bit_cidr1}"]
