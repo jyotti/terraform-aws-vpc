@@ -14,6 +14,11 @@ output "default_security_group_id" {
   value       = "${aws_vpc.this.default_security_group_id}"
 }
 
+output "default_route_table_id" {
+  description = "The ID of the default route table"
+  value       = "${aws_vpc.this.*.default_route_table_id}"
+}
+
 # Subnet
 output "public_subnet_ids" {
   description = "List of IDs of the public subnet"
