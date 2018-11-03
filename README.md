@@ -31,3 +31,8 @@
           10.0.184.0/21 - (spare)
     10.0.192.0/18 - (spare)
 ```
+
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
