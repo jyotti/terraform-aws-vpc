@@ -99,6 +99,7 @@ I refer to the explanation of [Practical VPC Design](https://medium.com/aws-acti
 | enable\_s3\_endpoint | Should be true if you want to provision an S3 endpoint to the VPC | string | `false` | no |
 | intra\_subnet\_tags | Additional tags for the intra subnets | map | `<map>` | no |
 | intra\_subnets | List of CIDR block for intra subnet | list | `<list>` | no |
+| map\_public\_ip\_on\_launch | Should be false if you do not want to auto-assign public IP on launch | string | `true` | no |
 | name | Name to be used on all the resources as identifier | string | `` | no |
 | private\_subnet\_tags | Additional tags for the private subnets | map | `<map>` | no |
 | private\_subnets | List of CIDR block for private subnet | list | `<list>` | no |

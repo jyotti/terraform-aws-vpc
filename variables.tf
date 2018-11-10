@@ -64,6 +64,11 @@ variable "enable_dynamodb_endpoint" {
   default     = false
 }
 
+variable "map_public_ip_on_launch" {
+  description = "Should be false if you do not want to auto-assign public IP on launch"
+  default     = true
+}
+
 variable "tags" {
   description = "A map of tags to add to all resources"
   default     = {}
