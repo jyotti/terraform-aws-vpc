@@ -19,7 +19,7 @@ Reference - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario1.html
 
 ```hcl
 module "vpc" {
-  source             = "github.com/jyotti/terraform-aws-vpc"
+  source             = "github.com/jyotti/terraform-aws-vpc?ref=v0.1.1"
   name               = "simple"
   cidr_block         = "10.0.0.0/16"
   public_subnets     = ["10.0.32.0/20", "10.0.96.0/20", "10.0.160.0/20"]
@@ -40,7 +40,7 @@ Reference - https://docs.aws.amazon.com/vpc/latest/userguide/VPC_Scenario2.html
 
 ```hcl
 module "vpc" {
-  source             = "github.com/jyotti/terraform-aws-vpc"
+  source             = "github.com/jyotti/terraform-aws-vpc?ref=v0.1.1"
   name               = "public-and-private-subnets"
   cidr_block         = "10.0.0.0/16"
   public_subnets     = ["10.0.32.0/20", "10.0.96.0/20", "10.0.160.0/20"]
