@@ -35,7 +35,10 @@ resource "aws_internet_gateway" "this" {
 resource "aws_route_table" "public" {
   vpc_id = "${aws_vpc.this.id}"
 
-  tags = "${merge(var.tags, map("Name", "public"))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.public_subnet_suffix}", var.name)),
+    var.tags
+    )}"
 }
 
 resource "aws_route" "public_internet_gateway" {
@@ -50,7 +53,10 @@ resource "aws_route_table" "private" {
 
   vpc_id = "${aws_vpc.this.id}"
 
-  tags = "${merge(var.tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.private_subnet_suffix}.%s", var.name, element(var.availability_zones, count.index))),
+    var.tags
+    )}"
 }
 
 // intra
@@ -59,7 +65,10 @@ resource "aws_route_table" "intra" {
 
   vpc_id = "${aws_vpc.this.id}"
 
-  tags = "${merge(var.tags, map("Name", "intra"))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.intra_subnet_suffix}", var.name)),
+    var.tags
+    )}"
 }
 
 #----------------------------------------------------------
@@ -74,7 +83,11 @@ resource "aws_subnet" "public" {
   availability_zone       = "${element(var.availability_zones, count.index)}"
   map_public_ip_on_launch = "${var.map_public_ip_on_launch}"
 
-  tags = "${merge(var.tags, var.public_subnet_tags, map("Name", format("public.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.public_subnet_suffix}.%s",var.name, element(var.availability_zones, count.index))),
+    var.tags,
+    var.public_subnet_tags
+    )}"
 }
 
 // private
@@ -85,7 +98,11 @@ resource "aws_subnet" "private" {
   cidr_block        = "${element(var.private_subnets, count.index)}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
-  tags = "${merge(var.tags, var.private_subnet_tags, map("Name", format("private.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.private_subnet_suffix}.%s",var.name, element(var.availability_zones, count.index))),
+    var.tags,
+    var.private_subnet_tags
+    )}"
 }
 
 // intra
@@ -96,7 +113,11 @@ resource "aws_subnet" "intra" {
   cidr_block        = "${element(var.intra_subnets, count.index)}"
   availability_zone = "${element(var.availability_zones, count.index)}"
 
-  tags = "${merge(var.tags, var.intra_subnet_tags, map("Name", format("intra.%s", element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    map("Name", format("%s.${var.intra_subnet_suffix}.%s",var.name, element(var.availability_zones, count.index))),
+    var.tags,
+    var.intra_subnet_tags
+    )}"
 }
 
 #----------------------------------------------------------
@@ -107,7 +128,9 @@ resource "aws_eip" "nat" {
 
   vpc = true
 
-  tags = "${merge(var.tags, map("Name", format("%s-%s", var.name, element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    var.tags, map("Name", format("%s-%s", var.name, element(var.availability_zones, count.index)))
+    )}"
 }
 
 resource "aws_nat_gateway" "this" {
@@ -116,7 +139,9 @@ resource "aws_nat_gateway" "this" {
   allocation_id = "${element(aws_eip.nat.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
 
-  tags = "${merge(var.tags, map("Name", format("%s.%s", var.name, element(var.availability_zones, count.index))))}"
+  tags = "${merge(
+    var.tags, map("Name", format("%s.%s", var.name, element(var.availability_zones, count.index)))
+    )}"
 }
 
 resource "aws_route" "private_nat_gateway" {

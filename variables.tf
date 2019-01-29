@@ -8,6 +8,21 @@ variable "cidr_block" {
   default     = "10.0.0.0/16"
 }
 
+variable "public_subnet_suffix" {
+  description = "Suffix to append to public subnets name"
+  default     = "public"
+}
+
+variable "private_subnet_suffix" {
+  description = "Suffix to append to private subnets name"
+  default     = "private"
+}
+
+variable "intra_subnet_suffix" {
+  description = "Suffix to append to intra subnets name"
+  default     = "intra"
+}
+
 variable "public_subnets" {
   description = "List of CIDR block for public subnet"
   default     = []
