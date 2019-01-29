@@ -60,7 +60,7 @@ locals {
 
 module "vpc" {
   source             = "../../"
-  name               = "public"
+  name               = "single-vpc"
   cidr_block         = "${var.cidr_block}"
   public_subnets     = ["${local.az1_20bit_cidr1}", "${local.az2_20bit_cidr1}", "${local.az3_20bit_cidr1}"]
   availability_zones = "${data.aws_availability_zones.available.names}"
